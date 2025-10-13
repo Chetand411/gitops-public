@@ -55,7 +55,7 @@ print(f"[INFO] Model trained with accuracy: {acc:.2f}")
 # -----------------------
 # 3. Generate Kitfile
 # -----------------------
-version = "1.0.0"
+version = "1.0.1"
 kitfile = Kitfile()
 kitfile.manifestVersion = "1.0"
 kitfile.package = {
