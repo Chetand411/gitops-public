@@ -15,7 +15,7 @@ from kitops.modelkit.kitfile import Kitfile
 # -----------------------
 # Config
 # -----------------------
-KIT_MODEL_NAME = os.getenv("KIT_MODEL_NAME", "modelkit")
+KIT_MODEL_NAME = os.getenv("KIT_MODEL_NAME", "testmodelkit")
 GIT_REPO_URL = os.getenv("GIT_REPO_URL", "https://github.com/Chetand411/gitops-public.git")
 GIT_TOKEN = os.getenv("GIT_TOKEN")
 JOZU_USERNAME = os.getenv("JOZU_USERNAME")
