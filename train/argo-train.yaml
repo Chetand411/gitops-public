@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: model-training-job
+  namespace: train-model
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Chetand411/gitops-public.git
+    targetRevision: main
+    path: train   # Folder containing model-training-job.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ml-pipeline  # Namespace to run the Job
+  syncPolicy:
+    automated:
+      prune: true       # Remove resources no longer in Git
+      selfHeal: true    # Reconcile cluster if drift occurs
+

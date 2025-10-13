@@ -1,0 +1,47 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: model-training-job
+  namespace: train-model 
+spec:
+  backoffLimit: 1
+  template:
+    spec:
+      serviceAccountName: gitops-job-sa  # Optional: set if RBAC is required
+      restartPolicy: Never
+      containers:
+        - name: model-trainer
+          image: chetanstevesai/kit-trainer:latest
+          command: ["python3", "/workspace/train_and_push.py"]
+          env:
+            # Jozu credentials
+            - name: JOZU_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: jozu-secret
+                  key: username
+            - name: JOZU_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: jozu-secret
+                  key: password
+            # Git token to push manifest updates
+            - name: GIT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: git-credentials
+                  key: token
+            # Model name and repo URL
+            - name: KIT_MODEL_NAME
+              value: "modelkit"
+            - name: GIT_REPO_URL
+              value: "https://github.com/Chetand411/gitops-public.git"
+          volumeMounts:
+            - name: repo-volume
+              mountPath: /workspace
+      volumes:
+        - name: repo-volume
+          gitRepo:
+            repository: "https://github.com/Chetand411/gitops-public.git"
+            revision: main
+
