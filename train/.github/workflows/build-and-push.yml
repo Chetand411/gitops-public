@@ -4,8 +4,7 @@ on:
   push:
     branches:
       - main  # Trigger on push to main branch
-    paths:
-      - "train/**"  # Trigger only if train/ folder changes
+  
 
 jobs:
   build-and-push:
