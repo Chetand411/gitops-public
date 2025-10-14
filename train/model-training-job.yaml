@@ -14,8 +14,8 @@ spec:
       restartPolicy: Never
       containers:
         - name: model-trainer
-          image: chetanstevesai/kit-trainer:1.0.6
-          command: ["python3", "/workspace/train_and_push.py"]
+          image: chetanstevesai/kit-trainer:1.0.7
+          command: ["python3", "/app/train_and_push.py"]
           env:
             - name: JOZU_USERNAME
               valueFrom:
@@ -38,7 +38,7 @@ spec:
               value: "https://github.com/Chetand411/gitops-public.git"
           volumeMounts:
             - name: repo-volume
-              mountPath: /workspace
+              mountPath: /workspace  # keep Git repo mounted here
       volumes:
         - name: repo-volume
           gitRepo:
