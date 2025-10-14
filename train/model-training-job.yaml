@@ -15,7 +15,6 @@ spec:
       containers:
         - name: model-trainer
           image: chetanstevesai/kit-trainer:1.0.8
-          command: ["python3", "/app/train_and_push.py"]
           env:
             - name: JOZU_USERNAME
               valueFrom:
