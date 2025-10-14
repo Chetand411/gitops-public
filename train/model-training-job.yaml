@@ -19,12 +19,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: jozu-secret
-                  key: username
+                  key: JOZU_USERNAME
             - name: JOZU_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: jozu-secret
-                  key: password
+                  key: JOZU_PASSWORD
             # Git token to push manifest updates
             - name: GIT_TOKEN
               valueFrom:
