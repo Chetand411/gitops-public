@@ -20,7 +20,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: model-trainer
-          image: chetanstevesai/kit-trainer:1.0.03
+          image: chetanstevesai/kit-trainer:1.0.0
           command: ["python3", "/workspace/train_and_push.py"]
           env:
             - name: JOZU_USERNAME
