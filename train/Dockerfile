@@ -13,7 +13,7 @@ RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 # Copy the training script
-COPY train_and_push.py .
+COPY train/train_and_push.py .
 
 # Optional: create directories for data and output
 RUN mkdir -p /workspace/data /workspace/output /workspace/manifests
