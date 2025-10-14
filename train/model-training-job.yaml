@@ -5,16 +5,21 @@ metadata:
   namespace: train-model 
 spec:
   backoffLimit: 1
+  selector:
+    matchLabels:
+      job: model-training-job
   template:
+    metadata:
+      labels:
+        job: model-training-job
     spec:
-      serviceAccountName: gitops-job-sa  # Optional: set if RBAC is required
+      serviceAccountName: gitops-job-sa
       restartPolicy: Never
       containers:
         - name: model-trainer
           image: chetanstevesai/kit-trainer:1.0.02
           command: ["python3", "/workspace/train_and_push.py"]
           env:
-            # Jozu credentials
             - name: JOZU_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -25,13 +30,11 @@ spec:
                 secretKeyRef:
                   name: jozu-secret
                   key: JOZU_PASSWORD
-            # Git token to push manifest updates
             - name: GIT_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: git-credentials
                   key: token
-            # Model name and repo URL
             - name: KIT_MODEL_NAME
               value: "modelkit"
             - name: GIT_REPO_URL
@@ -44,4 +47,3 @@ spec:
           gitRepo:
             repository: "https://github.com/Chetand411/gitops-public.git"
             revision: main
-
