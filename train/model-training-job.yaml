@@ -5,7 +5,6 @@ metadata:
   namespace: train-model
   annotations:
     argocd.argoproj.io/hook: PreSync
-    argocd.argoproj.io/hook-delete-policy: HookSucceeded,HookFailed
 spec:
   backoffLimit: 1
   selector:
