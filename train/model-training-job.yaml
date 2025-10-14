@@ -14,7 +14,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: model-trainer
-          image: chetanstevesai/kit-trainer:1.0.8
+          image: chetanstevesai/kit-trainer:1.0.9
           env:
             - name: JOZU_USERNAME
               valueFrom:
