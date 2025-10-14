@@ -3,8 +3,6 @@ kind: Job
 metadata:
   name: model-training-job   
   namespace: train-model
-  annotations:
-    argocd.argoproj.io/hook: PreSync
 spec:
   backoffLimit: 1
   selector:
