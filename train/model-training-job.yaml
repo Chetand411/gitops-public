@@ -37,7 +37,7 @@ spec:
               value: "https://github.com/Chetand411/gitops-public.git"
           volumeMounts:
             - name: repo-volume
-              mountPath: /workspace  # keep Git repo mounted here
+              mountPath: /workspace 
       volumes:
         - name: repo-volume
           gitRepo:
