@@ -12,10 +12,6 @@ from git import Repo
 # KitOps imports
 from kitops.modelkit.kitfile import Kitfile
 
-# MLflow imports
-import mlflow
-import mlflow.sklearn
-
 # -----------------------
 # Config
 # -----------------------
@@ -24,9 +20,6 @@ GIT_REPO_URL = os.getenv("GIT_REPO_URL", "https://github.com/Chetand411/gitops-p
 GIT_TOKEN = os.getenv("GIT_TOKEN")
 JOZU_USERNAME = os.getenv("JOZU_USERNAME")
 JOZU_PASSWORD = os.getenv("JOZU_PASSWORD")
-MLFLOW_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI", "http://mlflow-server:5000")  # 👈 MLflow server pod
-MLFLOW_EXPERIMENT = os.getenv("MLFLOW_EXPERIMENT", "modelkit-demo")
-
 MANIFEST_FILE = Path("/workspace/manifests/model-version.yaml")
 WORKSPACE = Path("/workspace")
 MODELKIT_DIR = WORKSPACE / "modelkit"
@@ -48,36 +41,16 @@ def run_cmd(cmd, check=True):
 MODELKIT_DIR.mkdir(exist_ok=True, parents=True)
 
 # -----------------------
-# 1.1 Setup MLflow
-# -----------------------
-mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
-mlflow.set_experiment(MLFLOW_EXPERIMENT)
-
-# -----------------------
 # 2. Train Iris Model
 # -----------------------
 X, y = load_iris(return_X_y=True)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-
 model = LogisticRegression(max_iter=200)
-
-with mlflow.start_run(run_name=f"{KIT_MODEL_NAME}-train") as run:
-    model.fit(X_train, y_train)
-    acc = model.score(X_test, y_test)
-    model_file = MODELKIT_DIR / "model.pkl"
-    joblib.dump(model, model_file)
-    print(f"[INFO] Model trained with accuracy: {acc:.2f}")
-
-    # ✅ Log metrics & params to MLflow
-    mlflow.log_param("model_type", "LogisticRegression")
-    mlflow.log_param("max_iter", 200)
-    mlflow.log_metric("accuracy", acc)
-
-    # ✅ Log model artifact to MLflow
-    mlflow.sklearn.log_model(model, "model")
-    mlflow.log_artifact(str(model_file))
-
-    # We'll also log the Kitfile later once it's created
+model.fit(X_train, y_train)
+acc = model.score(X_test, y_test)
+model_file = MODELKIT_DIR / "model.pkl"
+joblib.dump(model, model_file)
+print(f"[INFO] Model trained with accuracy: {acc:.2f}")
 
 # -----------------------
 # 3. Generate Kitfile
@@ -128,9 +101,6 @@ with open(kitfile_path, "w") as f:
     f.write(kitfile.to_yaml())
 print(f"[INFO] Kitfile created at {kitfile_path}")
 
-# ✅ Log Kitfile as artifact in the same MLflow run
-mlflow.log_artifact(str(kitfile_path))
-
 # -----------------------
 # 4. Download and install KitOps CLI
 # -----------------------
@@ -179,3 +149,4 @@ if MANIFEST_FILE.exists():
     repo.index.commit(f"Update {KIT_MODEL_NAME} version to {version}")
     repo.remote().push()
     print("[INFO] Manifest updated and pushed to Git")
+
